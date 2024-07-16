@@ -9,21 +9,13 @@ if(FALSE) {
     
 }
 
-
 DrawNS = "http://schemas.openxmlformats.org/drawingml/2006/main"
 
 pptxTables =
-function(file, page = integer(), ar = zipArchive(file))    
+function(file, page = integer(), ar = zipArchive(file), slides = ptxSlides(ar = ar, page = page))    
 {
-    if(length(page) == 0)
-        page = grep("^ppt/slides/.*\\.xml$", names(ar), value = TRUE)
-    else if(is.integer(page)) {
-        rx = sprintf("^ppt/slides/slide(%s)\\.xml$", paste(page, collapse = "|"))
-        page = grep(rx, names(ar), value = TRUE)
-    } 
-
-    ans = lapply(page, readSlideTable, ar)
-    names(ans) = page
+    ans = lapply(slides, readSlideTable, ar)
+    names(ans) = slides
     ans
 }
 
